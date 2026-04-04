@@ -2,12 +2,13 @@
 name = "pidfrees"
 version = "0.1.0"
 edition = "2021"
-authors = ["Jorge Andre Castro <ton-email@exemple.com>"]
+authors = ["Jorge Andre Castro <georgeandrec@gmail.com>"]
 license = "GPL-2.0-or-later"
-description = "A robust PID controller implementation in Rust, free for people"
+description = "A robust PID controller implementation for no_std environments, protected by GPL."
+repository = "https://github.com/jorgeandrecastro/pidfrees" 
+documentation = "https://docs.rs/pidfrees"
 
-[dependencies]
-# Tes futures dépendances ici
+
 
 [profile.release]
 opt-level = "z"     # Optimise pour la taille minimale 

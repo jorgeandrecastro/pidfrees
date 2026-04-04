@@ -1,4 +1,4 @@
-# 🦅 pidfrees v0.1.0
+# 🦅 pidfrees v0.1.2
 **A Robust, High-Precision PID Controller for Rust.**
 
 Created by **Jorge Andre Castro**.
@@ -20,7 +20,7 @@ This crate is built to prevent the privatization of essential control techniques
 Add this to your `Cargo.toml`:
 ```toml
 [dependencies]
-pidfrees = "0.1.0"
+pidfrees = "0.1.2"
 Quick Start
 Rust
 use pidfrees::PidController;

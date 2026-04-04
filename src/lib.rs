@@ -11,31 +11,32 @@
 
 /// Core PID Controller structure.
 /// Maintains internal state for integral and derivative calculations.
-
 /// # Example
 ///
 /// ```
 /// use pidfrees::PidController;
 ///
+/// // Note : Si tu utilises f32, remplace les nombres par 1.0_f32 etc.
 /// let mut pid = PidController::new(1.0, 0.1, 0.01, 100.0, -100.0, 100.0);
 /// let output = pid.update(50.0, 0.1);
 /// assert!(output > 0.0);
 /// ```
+// This optionally uses f32 for reduced memory usage, but defaults to f64 for better precision.
+#[cfg(feature = "f32")]
+pub type Float = f32;
+// By default, we use f64 for better precision in control calculations.
+#[cfg(not(feature = "f32"))]
+pub type Float = f64;
+
 pub struct PidController {
-    /// Proportional gain
-    pub kp: f64,
-    /// Integral gain
-    pub ki: f64,
-    /// Derivative gain
-    pub kd: f64,
-    
-    setpoint: f64,
-    integral: f64,
-    last_measurement: f64,
-    
-    // Safety and robustness parameters
-    output_min: f64,
-    output_max: f64,
+    pub kp: Float,
+    pub ki: Float,
+    pub kd: Float,
+    setpoint: Float,
+    integral: Float,
+    last_measurement: Float,
+    output_min: Float,
+    output_max: Float,
 }
 
 impl PidController {
@@ -45,7 +46,7 @@ impl PidController {
     /// * `kp`, `ki`, `kd` - PID gains.
     /// * `setpoint` - The target value to reach.
     /// * `min`, `max` - Hard limits for the output and integral term (Anti-Windup).
-    pub fn new(kp: f64, ki: f64, kd: f64, setpoint: f64, min: f64, max: f64) -> Self {
+    pub fn new(kp: Float, ki: Float, kd: Float, setpoint: Float, min: Float, max: Float) -> Self {
         Self {
             kp,
             ki,
@@ -63,7 +64,7 @@ impl PidController {
     /// # Arguments
     /// * `measurement` - The current process value (PV).
     /// * `dt` - Delta time since the last update.
-    pub fn update(&mut self, measurement: f64, dt: f64) -> f64 {
+    pub fn update(&mut self, measurement: Float, dt: Float) -> Float {
         // Prevent division by zero and handle invalid time steps
         if dt <= 0.0 {
             return 0.0;
@@ -75,13 +76,11 @@ impl PidController {
         let p = self.kp * error;
 
         // 2. Integral Term with Anti-Windup protection
-        // Clamping the integral prevents it from accumulating beyond physical limits.
         self.integral += self.ki * error * dt;
         self.integral = self.integral.clamp(self.output_min, self.output_max);
 
         // 3. Derivative Term on Measurement
-        // Calculating derivative on measurement (PV) instead of error avoids "derivative kicks"
-        // when the setpoint changes abruptly.
+        // Avoids "derivative kicks" during setpoint changes.
         let d = -self.kd * (measurement - self.last_measurement) / dt;
         
         self.last_measurement = measurement;
@@ -91,20 +90,19 @@ impl PidController {
     }
 
     /// Updates the target setpoint dynamically.
-    pub fn set_target(&mut self, setpoint: f64) {
+    pub fn set_target(&mut self, setpoint: Float) {
         self.setpoint = setpoint;
     }
 
     /// Returns the current setpoint.
-    pub fn get_target(&self) -> f64 {
+    pub fn get_target(&self) -> Float {
         self.setpoint
     }
 }
 
 #[cfg(test)]
 mod tests {
-    // On importe explicitement ce dont on a besoin depuis la std
-    // car le reste de la crate est en no_std
+   // We need to import the standard library for testing purposes, as `no_std` is used for the main crate.
     extern crate std;
     use std::println;
     use super::*;

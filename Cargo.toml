@@ -12,8 +12,14 @@ readme = "Readme.md"
 
 
 [profile.release]
-opt-level = "z"     # Optimise pour la taille minimale 
-lto = true          # Link Time Optimization 
-codegen-units = 1   # Maximise l'optimisation au détriment du temps de compilation
-panic = "abort"     # Supprime le texte d'erreur lourd en cas de crash
-strip = true        # Retire tous les symboles de debug (rend le reverse-engineering impossible)
+opt-level = "z"     # Optimize for minimum size
+lto = true          # Link Time Optimization
+codegen-units = 1   # Maximizes optimization at the expense of compilation time
+panic = "abort"     # Removes heavy error messages in case of a crash
+strip = true        # Removes all debug symbols (makes reverse engineering impossible)
+
+
+[features]
+# Par défaut, on ne change rien pour ne pas casser l'existant
+default = [] 
+f32 = [] # L'option magique pour le RP2040

@@ -1,0 +1,17 @@
+[package]
+name = "pidfrees"
+version = "0.1.0"
+edition = "2021"
+authors = ["Jorge Andre Castro <ton-email@exemple.com>"]
+license = "GPL-2.0-or-later"
+description = "A robust PID controller implementation in Rust, free for people"
+
+[dependencies]
+# Tes futures dépendances ici
+
+[profile.release]
+opt-level = "z"     # Optimise pour la taille minimale 
+lto = true          # Link Time Optimization 
+codegen-units = 1   # Maximise l'optimisation au détriment du temps de compilation
+panic = "abort"     # Supprime le texte d'erreur lourd en cas de crash
+strip = true        # Retire tous les symboles de debug (rend le reverse-engineering impossible)

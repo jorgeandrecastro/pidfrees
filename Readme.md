@@ -22,7 +22,7 @@ Credit: Big thanks to the community (Luc E.Brunet) for the feedback!
 
 no_std Native: Built for bare-metal environments like Embassy, RTIC, or custom kernels.
 
-Industrial Robustness: Native Anti-Windup protection and derivative based on measurement (PV) to avoid "derivative kicks" during setpoint changes.
+Robustness: Native Anti-Windup protection and derivative based on measurement (PV) to avoid "derivative kicks" during setpoint changes.
 
 Zero-Cost Abstraction: Zero binary overhead regardless of the chosen precision.
 

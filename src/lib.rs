@@ -3,8 +3,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 2 or the License, or
 // (at your option) any later version.
-#![no_std] // On annonce que la crate n'a pas besoin de la bibliothèque standard par défaut
-//! # pidfrees
+#![no_std] // We use no_std to ensure our library can be used in embedded environments without the Rust standard library.
 //! 
 //! A robust PID controller implementation with Anti-Windup and Derivative filtering.
 //! Designed for reliability and protection against code privatization.
@@ -14,9 +13,10 @@
 /// # Example
 ///
 /// ```
+/// 
+/// // This example demonstrates how to create a PID controller and update it with a measurement.
 /// use pidfrees::PidController;
-///
-/// // Note : Si tu utilises f32, remplace les nombres par 1.0_f32 etc.
+/// 
 /// let mut pid = PidController::new(1.0, 0.1, 0.01, 100.0, -100.0, 100.0);
 /// let output = pid.update(50.0, 0.1);
 /// assert!(output > 0.0);
@@ -32,6 +32,7 @@ pub struct PidController {
     pub kp: Float,
     pub ki: Float,
     pub kd: Float,
+    first_run: bool,// We can use this flag to handle the first update call for derivative calculation.
     setpoint: Float,
     integral: Float,
     last_measurement: Float,
@@ -56,6 +57,7 @@ impl PidController {
             last_measurement: 0.0,
             output_min: min,
             output_max: max,
+            first_run: true,// We initialize the first_run flag to true to handle the first update call correctly.
         }
     }
 
@@ -68,6 +70,12 @@ impl PidController {
         // Prevent division by zero and handle invalid time steps
         if dt <= 0.0 {
             return 0.0;
+        }
+
+        // Handle the first run to initialize last_measurement without calculating a derivative kick.
+        if self.first_run {
+            self.last_measurement = measurement;
+            self.first_run = false;
         }
 
         let error = self.setpoint - measurement;

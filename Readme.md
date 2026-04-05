@@ -1,4 +1,4 @@
-🦅 pidfrees version 0.1.4
+🦅 Version 0.1.5  The "Smooth Start" Patch
 A Robust, High-Performance PID Controller for Rust (std & no_std).
 Optimized for embedded systems like RP2040 (Pico), Pico 2, STM32, and ESP32.
 
@@ -11,6 +11,14 @@ pidfrees provides a Robust control logic while remaining strictly Open Source. T
 Adaptive Precision: Choose between f64 for high precision (Cloud/PC) or f32 for blazing-fast performance on microcontrollers.
 
 Dynamic Tuning (New! ✨): Update Kp, Ki, Kd, and Setpoint at runtime without re-initializing the controller.
+
+📋 Changelog & Updates
+🦅 Version 0.1.5 - The "Smooth Start" Patch
+Fix: Anti-Derivative Kick: Added a first_run synchronization flag.
+
+Why? Previously, the first update() call could cause a massive output spike if the initial measurement was far from zero. Now, the controller initializes last_measurement with the first value it sees, ensuring a silky-smooth startup for your motors and actuators.
+
+Credit: Big thanks to the community (Luc E.Brunet) for the feedback!
 
 no_std Native: Built for bare-metal environments like Embassy, RTIC, or custom kernels.
 

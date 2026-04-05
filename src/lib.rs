@@ -98,6 +98,22 @@ impl PidController {
     pub fn get_target(&self) -> Float {
         self.setpoint
     }
+
+
+
+    pub fn set_kp(&mut self, kp: Float) {
+        self.kp = kp;
+    }
+
+    /// Updates the Integral gain at runtime.
+    pub fn set_ki(&mut self, ki: Float) {
+        self.ki = ki;
+    }
+
+    /// Updates the Derivative gain at runtime.
+    pub fn set_kd(&mut self, kd: Float) {
+        self.kd = kd;
+    }
 }
 
 #[cfg(test)]
@@ -129,4 +145,15 @@ mod tests {
         let output = pid.update(50.0, 0.0);
         assert_eq!(output, 0.0);
     }
+
+    #[test]
+    fn test_dynamic_tuning() {
+      let mut pid = PidController::new(1.0, 0.0, 0.0, 100.0, -100.0, 100.0);
+      let out1 = pid.update(50.0, 0.1); // Erreur 50, Kp 1.0 -> Out 50
+      assert_eq!(out1, 50.0);
+
+      pid.set_kp(2.0); // On double le gain
+      let out2 = pid.update(50.0, 0.1); // Erreur 50, Kp 2.0 -> Out 100
+      assert_eq!(out2, 100.0);
+}
 }

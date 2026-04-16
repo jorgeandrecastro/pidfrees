@@ -1,6 +1,6 @@
 [package]
 name = "pidfrees"
-version = "0.1.5"
+version = "0.2.0"
 edition = "2021"
 authors = ["Jorge Andre Castro <georgeandrec@gmail.com>"]
 license = "GPL-2.0-or-later"
@@ -12,7 +12,7 @@ readme = "Readme.md"
 
 
 [profile.release]
-opt-level = "z"     # Optimize for minimum size
+opt-level = 3    # Optimize for max speed
 lto = true          # Link Time Optimization
 codegen-units = 1   # Maximizes optimization at the expense of compilation time
 panic = "abort"     # Removes heavy error messages in case of a crash
@@ -22,4 +22,4 @@ strip = true        # Removes all debug symbols (makes reverse engineering impos
 [features]
 # Par défaut, on ne change rien pour ne pas casser l'existant
 default = [] 
-f32 = [] # L'option magique pour le RP2040
+f32 = [] # L'option magique pour le RP2350

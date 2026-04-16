@@ -4,7 +4,7 @@
 // the Free Software Foundation, either version 2 or the License, or
 // (at your option) any later version.
 #![no_std] // We use no_std to ensure our library can be used in embedded environments without the Rust standard library.
-//! 
+#![forbid(unsafe_code)]
 //! A robust PID controller implementation with Anti-Windup and Derivative filtering.
 //! Designed for reliability and protection against code privatization.
 

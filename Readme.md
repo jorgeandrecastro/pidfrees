@@ -1,66 +1,72 @@
-🦅 Version 0.1.5  The "Smooth Start" Patch
-A Robust, High-Performance PID Controller for Rust (std & no_std).
-Optimized for embedded systems like RP2040 (Pico), Pico 2, STM32, and ESP32.
+# Pidfrees v 0.2.0
 
-Created by Jorge Andre Castro.
+- LA Version 0.2.0 , introduit le safety avec #![forbid(unsafe_code)] et une optimisation pour la rapiditée avec opt-level = 3  . 
 
-🛡️ The Mission
-pidfrees provides a Robust control logic while remaining strictly Open Source. This crate uses the GPL-2.0-or-later license to ensure that essential control algorithms remain a common good and are never privatized.
+- La  Version 0.1.5 introduit le  Le Correctif "Démarrage Lisse"
+Un Contrôleur PID Robuste et Haute Performance pour Rust (std & no_std).
+Optimisé pour les systèmes embarqués comme RP2040 (Pico), Pico 2, STM32 et ESP32.
 
-🚀 Key Features
-Adaptive Precision: Choose between f64 for high precision (Cloud/PC) or f32 for blazing-fast performance on microcontrollers.
+# 🛡️ La Mission
+pidfrees fournit une logique de contrôle robuste tout en restant strictement Open Source. Cette crate utilise la licence GPL-2.0-or-later pour assurer que les algorithmes de contrôle essentiels restent un bien commun et ne soient jamais privatisés.
 
-Dynamic Tuning (New! ✨): Update Kp, Ki, Kd, and Setpoint at runtime without re-initializing the controller.
+# 🚀 Caractéristiques Principales
+Précision Adaptative : Choisissez entre f64 pour une haute précision (Cloud/PC) ou f32 pour une performance éclair sur les microcontrôleurs.
 
-📋 Changelog & Updates
-🦅 Version 0.1.5 - The "Smooth Start" Patch
-Fix: Anti-Derivative Kick: Added a first_run synchronization flag.
+Tuning Dynamique (Nouveau ! ✨) : Mettez à jour Kp, Ki, Kd et le Setpoint à l'exécution sans réinitialiser le contrôleur.
 
-Why? Previously, the first update() call could cause a massive output spike if the initial measurement was far from zero. Now, the controller initializes last_measurement with the first value it sees, ensuring a silky-smooth startup for your motors and actuators.
+📋 Journal des Modifications & Mises à Jour
+🦅 Version 0.1.5  Le Correctif "Démarrage Lisse"
+Correction : Anti-Derivative Kick : Un flag de synchronisation first_run a été ajouté.
 
-Credit: Big thanks to the community (Luc E.Brunet) for the feedback!
+Pourquoi ? Auparavant, le premier appel update() pouvait causer un énorme pic de sortie si la mesure initiale était loin de zéro. Maintenant, le contrôleur initialise last_measurement avec la première valeur qu'il voit, assurant un démarrage très lisse pour vos moteurs et actionneurs.
 
-no_std Native: Built for bare-metal environments like Embassy, RTIC, or custom kernels.
+Crédit : Un grand merci à la communauté (Luc E.Brunet) pour vos retours !
 
-Robustness: Native Anti-Windup protection and derivative based on measurement (PV) to avoid "derivative kicks" during setpoint changes.
+no_std Natif : Construit pour les environnements bare-metal comme Embassy, RTIC ou des noyaux personnalisés.
 
-Zero-Cost Abstraction: Zero binary overhead regardless of the chosen precision.
+Robustesse : Protection native Anti-Windup et dérivée basée sur la mesure (PV) pour éviter les "derivative kicks" lors des changements de setpoint.
 
-🛠️ Usage
-Standard (f64 by default)
+Abstraction Zéro-Coût : Zéro surcharge binaire indépendamment de la précision choisie.
+
+🛠️ Utilisation
+Standard (f64 par défaut)
 Ini, TOML
 [dependencies]
-pidfrees = "0.1.4"
-Ultra-Fast (f32 for RP2040 / Pico / ESP32)
+pidfrees = "0.2.0"
+Ultra-Rapide (f32 pour RP2040 / Pico / ESP32)
 Ini, TOML
 [dependencies]
 pidfrees = { version = "0.1.4", features = ["f32"] }
-💡 Quick Start
-Rust
+💡 Démarrage Rapide
+````rust
 use pidfrees::PidController;
 
-// 1. Initialisation: Kp, Ki, Kd, Target, Min_Out, Max_Out
+// 1. Initialisation : Kp, Ki, Kd, Cible, Min_Sortie, Max_Sortie
 let mut pid = PidController::new(2.0, 0.5, 0.1, 50.0, 0.0, 100.0);
 
-// 2. Compute output
+// 2. Calculer la sortie
 let power = pid.update(45.0, 0.1); 
 
-// 3. Dynamic Tuning (New in 0.1.4)
-// Change gains on the fly if your system state changes!
+// 3. Tuning Dynamique (Nouveau en 0.1.4)
+// Changez les gains à la volée si l'état de votre système change !
 pid.set_kp(1.5);
 pid.set_target(60.0);
-🎮 Example: Gain Scheduling
+🎮 Exemple : Planification des Gains
 Rust
-// If your robot picks up a heavy load, you might need more aggressive gains
+// Si votre robot porte une charge lourde, vous pourriez avoir besoin de gains plus agressifs
 if robot.is_carrying_load() {
-    pid.set_kp(3.5); // Increase proportional gain
-    pid.set_ki(0.8); // Increase integral to counter gravity
+    pid.set_kp(3.5); // Augmentez le gain proportionnel
+    pid.set_ki(0.8); // Augmentez l'intégral pour compenser la gravité
 } else {
-    pid.set_kp(2.0); // Back to normal
+    pid.set_kp(2.0); // Retour à la normale
 }
-⚖️ License
-This project is licensed under the GNU General Public License v2.0 or later.
-You are free to use it, but any modification or improvement MUST be shared with the community. That’s the contract of freedom.
 
-🦅 Why upgrade?
-Because in embedded systems, every CPU cycle and every byte of RAM counts. With the f32 feature and Dynamic Tuning, pidfrees is one of the lightest and most flexible tools available to tame your motors and sensors without sacrificing safety.
+````
+# ⚖️ Licence
+Ce projet est licencié sous la Licence Publique Générale GNU v2.0 ou ultérieure.
+Vous êtes libre de l'utiliser, mais toute modification ou amélioration DOIT être partagée avec la communauté. C'est le contrat de la liberté.
+
+Créé par Jorge Andre Castro.
+
+# Pourquoi mettre à jour ?
+Parce que dans les systèmes embarqués, chaque cycle CPU et chaque octet de RAM compte. Avec la fonctionnalité f32 et le Tuning Dynamique, pidfrees est l'un des outils les plus légers et les plus flexibles disponibles pour dompter vos moteurs et capteurs sans sacrifier la sécurité.
